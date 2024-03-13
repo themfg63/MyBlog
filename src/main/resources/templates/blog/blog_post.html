@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymleaf.org">
+<head>
+    <meta charset="UTF-8">
+</head>
+<div th:replace="blog/header :: header"></div>
+<body class="pb-5">
+<div th:replace="blog/header :: navbar"></div>
+<br>
+<div class="container">
+    <div class="row">
+        <div class="col-9">
+            <h2 th:text="${post.title}"></h2>
+            <hr />
+            <h4 th:text="${post.shortDescription}"></h4>
+            <hr/>
+            <div th:utext="${post.content}"></div>
+            <hr/>
+            <div>
+                <h3>Yorumlar: </h3>
+                <div th:each="comment: ${post.comments}">
+                    <div>
+                        <p><b>Ad: </b><strong th:text="${comment.name}"></strong></p>
+                        <p><b>Tarih: <strong th:text="${#temporals.format(comment.createdOn,'dd MMM yyyy')}"></strong></b></p>
+                        <p th:text="${comment.content}"></p>
+                        <hr>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Yorum Yap</h2>
+                    </div>
+                    <div class="card-body">
+                        <form role="form" method="post" th:action="@{/{postUrl}/comments(postUrl=${post.url})}" th:object="${comment}">
+                            <div class="row">
+                                <div class="col-md-5 mb-3">
+                                    <input class="form-control" id="name" type="text" name="name" placeholder="İsim Girin" th:field="*{name}">
+                                    <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="text-danger"></p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-5 mb-3">
+                                    <input class="form-control"  id="email" type="text" name="email" placeholder="E-Posta Girin" th:field="*{email}"/>
+                                    <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="text-danger"></p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-10 mb-3">
+                                    <textarea class="form-control" id="content"  name="content" placeholder="İçerik Girin" th:field="*{content}" rows="8" ></textarea>
+                                    <p th:if="${#fields.hasErrors('content')}" th:errors="*{content}" class="text-danger"></p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-md-5">
+                                    <button class="btn btn-primary" type="submit">Kaydet</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+
+
+        <div class="col-3">
+            <div th:replace="blog/search :: search"></div>
+        </div>
+    </div>
+</div>
+<br>
+<div th:replace="blog/footer :: footer"></div>
+
+</body>
+
+</html>
